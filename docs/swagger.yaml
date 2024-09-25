@@ -1,0 +1,63 @@
+openapi: 3.0.2
+info:
+  title: GAMES-API
+  version: 1.0.0
+  description: A brand new API with no content.  Go nuts!
+paths:
+  /games:
+    get:
+      tags:
+        - games
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+              examples:
+                List of games:
+                  value:
+                    - 'STALCRAFT:X'
+                    - PUBG
+          description: Returns a list of games
+      description: Returns a list of all games in API
+  '/games/:id':
+    get:
+      tags:
+        - details
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                Full details of a given game id:
+                  value: "{id: 1, name: \"Witcher 3\", price: 29.99},\r\n    {id: 2, name: \"STALCRAFT:X\", price: 0.99},\r\n    {id: 3, name: \"Minecraft\", price: 22.99},\r\n    {id: 4, name: \"CS 2\", price: 9.99},\r\n    {id: 5, name: \"Roblox\", price: 0},\r\n    {id: 6, name: \"Genshin Impact\", price: 0},\r\n    {id: 7, name: \"Valorant\", price: 11.99},\r\n    {id: 8, name: \"GTA V\", price: 49.99}"
+          description: Returns full details of a give game id
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                Game not found:
+                  value: Game not found
+          description: Not found
+      operationId: id
+      summary: Get full details of a game
+      description: Returns full details of a given game id
+components:
+  schemas:
+    error:
+      title: Root Type for error
+      description: ''
+      type: object
+      properties:
+        error:
+          type: string
+      example:
+        error: Error message.
