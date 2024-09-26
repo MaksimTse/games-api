@@ -1,8 +1,8 @@
 openapi: 3.0.2
 info:
-  title: GAMES-API
+  title: Games-API
   version: 1.0.0
-  description: A brand new API with no content.  Go nuts!
+  description: '### This is a Swagger UI for our Games API'
 paths:
   /games:
     get:
@@ -14,16 +14,46 @@ paths:
             application/json:
               schema:
                 type: array
-                items: {}
+                items:
+                  type: string
               examples:
                 List of games:
                   value:
-                    - 'STALCRAFT:X'
-                    - PUBG
+                    - Witcher 3
+                    - STALCRAFT:X
           description: Returns a list of games
-      description: Returns a list of all games in API
-  '/games/:id':
+      summary: Get a list of a games
+      description: Returns a list of games
+    post:
+      requestBody:
+        description: A new game to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/new-game'
+        required: true
+      tags:
+        - new-game
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/new-game'
+          description: Game is created
+        '400':
+          description: One or all params are missing
+      summary: Creates a game
+      description: Creates a new game
+  '/games/{id}':
     get:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
       tags:
         - details
       responses:
@@ -35,29 +65,71 @@ paths:
                 items:
                   type: string
               examples:
-                Full details of a given game id:
-                  value: "{id: 1, name: \"Witcher 3\", price: 29.99},\r\n    {id: 2, name: \"STALCRAFT:X\", price: 0.99},\r\n    {id: 3, name: \"Minecraft\", price: 22.99},\r\n    {id: 4, name: \"CS 2\", price: 9.99},\r\n    {id: 5, name: \"Roblox\", price: 0},\r\n    {id: 6, name: \"Genshin Impact\", price: 0},\r\n    {id: 7, name: \"Valorant\", price: 11.99},\r\n    {id: 8, name: \"GTA V\", price: 49.99}"
-          description: Returns full details of a give game id
+                Full details of a given name:
+                  value:
+                    id: 1
+                    name: Witcher 3
+                    price: 29.99
+          description: Returns full details of a given id game
+        '204':
+          description: No content
         '404':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
               examples:
-                Game not found:
-                  value: Game not found
-          description: Not found
+                Game /w+ was not found:
+                  value: Game \\w+ was not found in game array
+          description: Error message
       operationId: id
       summary: Get full details of a game
-      description: Returns full details of a given game id
+      description: Returns full details of a given id game
+    delete:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/delete-game'
+      tags:
+        - delete
+      operationId: id
+      summary: Delete game
+      description: Deletes game
+    parameters:
+      -
+        name: id
+        in: path
+        required: true
 components:
   schemas:
     error:
-      title: Root Type for error
       description: ''
       type: object
+    new-game:
+      title: Root Type for new-game
+      description: ''
+      required:
+        - price
+        - name
+      type: object
       properties:
-        error:
+        name:
+          type: string
+        price:
+          format: float
+          type: number
+      example:
+        name: Tetris
+        price: 0.99
+    delete-game:
+      description: ''
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          description: ''
           type: string
       example:
-        error: Error message.
+        id: 1
