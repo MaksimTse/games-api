@@ -3,8 +3,24 @@ const vue = Vue.createApp({
         return {
             gameInModal: {name: null},
             games: [],
-            newGame: {name: '', price: 0}
+            newGame: {name: '', price: 0},
+            sortKey: 'name',
+            sortOrder: 'asc'
         }
+    },
+    computed: {
+        sortedGames() {
+            return this.games.slice().sort((a, b) => {
+                let result = 0;
+                if (this.sortKey === 'price') {
+                    result = a.price - b.price;
+                } else {
+                    result = a.name.localeCompare(b.name);
+                }
+
+                return this.sortOrder === 'asc' ? result : -result;
+            });
+        },
     },
     async created() {
         this.fetchGames();
@@ -37,6 +53,14 @@ const vue = Vue.createApp({
             this.newGame = {name: '', price: 0};
             this.fetchGames();
             this.closeModal();
+        },
+        sortBy(field) {
+            if (this.sortKey === field) {
+                this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                this.sortKey = field;
+                this.sortOrder = 'asc';
+            }
         },
         async deleteGame(id) {
             await fetch(`http://localhost:8080/games/${id}`, {

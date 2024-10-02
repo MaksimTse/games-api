@@ -1,0 +1,25 @@
+body {
+    background-color: #f8f9fa;
+}
+.page-header {
+    margin-bottom: 2rem;
+}
+.bg-indigo-400 {
+    background-color: #5C6BC0 !important;
+}
+.btn-indigo {
+    background-color: #3949ab;
+    color: white;
+}
+.btn-indigo:hover {
+    background-color: #303f9f;
+    color: white;
+}
+
+.rounded-btn {
+    border-radius: 14px;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}
