@@ -8,6 +8,9 @@ const vue = Vue.createApp({
             sortOrder: 'asc'
         }
     },
+    async created() {
+        this.fetchGames();
+    },
     computed: {
         sortedGames() {
             return this.games.slice().sort((a, b) => {
@@ -21,9 +24,6 @@ const vue = Vue.createApp({
                 return this.sortOrder === 'asc' ? result : -result;
             });
         },
-    },
-    async created() {
-        this.fetchGames();
     },
     methods: {
         async fetchGames() {
@@ -42,13 +42,49 @@ const vue = Vue.createApp({
             let addGameModal = new bootstrap.Modal(document.getElementById('addGameModal'), {});
             addGameModal.show();
         },
+        showEditGameModal(game) {
+            this.gameInModal = {...game};
+            let editGameModal = new bootstrap.Modal(document.getElementById('editGameModal'), {});
+            editGameModal.show();
+        },
+        async updateGame(id) {
+            const updatedGame = {
+                name: this.gameInModal.name,
+                price: this.gameInModal.price
+            };
+
+            try {
+                const response = await fetch(`http://localhost:8080/games/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedGame)
+                });
+
+                console.log('Response Status:', response.status);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Ошибка обновления игры:', errorData);
+                    alert(`Ошибка обновления игры: ${errorData.error || errorData.message || 'Неизвестная ошибка'}`);
+                    return;
+                }
+
+                this.fetchGames();
+                this.closeModal();
+            } catch (error) {
+                console.error('Произошла ошибка:', error);
+                alert('Произошла ошибка при обновлении игры. Пожалуйста, попробуйте снова.');
+            }
+        },
         async addGame() {
             await fetch('http://localhost:8080/games', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(this.newGame)
+                body: JSON.stringify(this.newGame),
             });
             this.newGame = {name: '', price: 0};
             this.fetchGames();

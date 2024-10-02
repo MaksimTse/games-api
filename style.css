@@ -23,3 +23,7 @@ body {
 .cursor-pointer{
     cursor: pointer;
 }
+
+.margin-right{
+    margin-right: 1%;
+}
