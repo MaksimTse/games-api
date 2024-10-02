@@ -1,11 +1,20 @@
 const express = require('express')
 const app = express()
 const port = 8080
-const swaggerUi = require('swagger-ui-express')
-const yamljs = require('yamljs')
+const swaggerUi = require('swagger-ui-express');
+const yamljs = require('yamljs');
 const swaggerDocument = yamljs.load('./docs/swagger.yaml');
-const cors = require('cors')
+const cors = require('cors');
+const mongoose = require('mongoose');
 
+mongodb+srv://MaksimTse:<db_password>@cluster0.wjhty.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+    .then(() => console.log('Connected to MongoDB Atlas'))
+    .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
 
 app.use(express.json())
 app.use(cors())

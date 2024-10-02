@@ -21,6 +21,8 @@
     "cors": "^2.8.5",
     "expres": "^0.0.5",
     "express": "^4.21.0",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.7.0",
     "swagger-ui-express": "^5.0.1",
     "vue.js": "^0.3.2",
     "xh": "^0.0.0",
